@@ -4,36 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flash Viewer</title>
-    <script src="https://unpkg.com/@rufflejs/ruffle"></script>
+    <script src="https://unpkg.com/@rufflejs/ruffle@latest"></script>
     <script>
-        window.onload = function() {
-            const ruffle = window.RufflePlayer.newest();
-            const player = ruffle.createPlayer();
-            document.body.appendChild(player);
+        window.onload = async function() {
+            // RufflePlayerのインスタンスを取得
+            const ruffle = window.RufflePlayer;
+            if (ruffle) {
+                const player = ruffle.newest().createPlayer();
+                document.body.appendChild(player);
 
-            // ファイル選択用の入力要素を作成
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = '.swf,.fla';  // Flashファイルの拡張子を制限
-            fileInput.style.marginTop = '20px';  // スタイル調整
-            document.body.appendChild(fileInput);
+                // ファイル選択用の入力要素を作成
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '.swf,.fla';  // Flashファイルの拡張子を制限
+                fileInput.style.marginTop = '20px';  // スタイル調整
 
-            // アップロードボタンを作成
-            const uploadButton = document.createElement('button');
-            uploadButton.textContent = 'Flashファイルをアップロード';
-            uploadButton.style.marginTop = '10px';
-            document.body.appendChild(uploadButton);
+                // アップロードボタンを作成
+                const uploadButton = document.createElement('button');
+                uploadButton.textContent = 'Flashファイルをアップロード';
+                uploadButton.style.marginTop = '10px';
 
-            uploadButton.addEventListener('click', function() {
-                const file = fileInput.files[0];
-                if (file) {
-                    const fileURL = URL.createObjectURL(file);
-                    player.load(fileURL);
-                    player.play();
-                } else {
-                    alert('ファイルを選択してください。');
-                }
-            });
+                // アップロードボタンのイベントリスナー
+                uploadButton.addEventListener('click', function() {
+                    const file = fileInput.files[0];
+                    if (file) {
+                        const fileURL = URL.createObjectURL(file);
+                        player.load(fileURL);
+                        player.play();
+                    } else {
+                        alert('ファイルを選択してください。');
+                    }
+                });
+
+                // DOMに要素を追加
+                document.body.appendChild(fileInput);
+                document.body.appendChild(uploadButton);
+            } else {
+                console.error('Ruffle Playerが読み込まれていません。');
+            }
         };
     </script>
 </head>
